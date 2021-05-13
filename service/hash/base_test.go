@@ -8,15 +8,15 @@ import (
 
 type testCaseHash struct {
 	workerCount int
-	links       []string
+	data        []string
 	output      map[string]string
 	hashFunc    hash.HashFunc
 
 	name string
 }
 
-func hashFunc(link string) string {
-	if link == "google.com" {
+func hashFunc(datum string) string {
+	if datum == "google.com" {
 		return "encodedgoogle"
 	}
 
@@ -41,16 +41,16 @@ func generateHashTestCase() []testCaseHash {
 		},
 		{
 			workerCount: 5,
-			name:        "no link",
+			name:        "no datum",
 			hashFunc:    hashFunc,
-			links:       []string{},
+			data:        []string{},
 			output:      map[string]string{},
 		},
 		{
 			workerCount: 5,
-			name:        "number of worker is higher than link",
+			name:        "number of worker is higher than datum",
 			hashFunc:    hashFunc,
-			links:       []string{"google.com", "facebook.com"},
+			data:        []string{"google.com", "facebook.com"},
 			output: map[string]string{
 				"google.com":   "encodedgoogle",
 				"facebook.com": "default",
@@ -58,9 +58,9 @@ func generateHashTestCase() []testCaseHash {
 		},
 		{
 			workerCount: 1,
-			name:        "number of worker is lower than link",
+			name:        "number of worker is lower than datum",
 			hashFunc:    hashFunc,
-			links:       []string{"google.com", "facebook.com"},
+			data:        []string{"google.com", "facebook.com"},
 			output: map[string]string{
 				"google.com":   "encodedgoogle",
 				"facebook.com": "default",
@@ -73,7 +73,7 @@ func TestHash(t *testing.T) {
 	testCases := generateHashTestCase()
 
 	for _, testCase := range testCases {
-		resp := hash.Hash(testCase.hashFunc, testCase.links, testCase.workerCount)
+		resp := hash.Hash(testCase.hashFunc, testCase.data, testCase.workerCount)
 
 		if testCase.output == nil {
 			if resp != nil {

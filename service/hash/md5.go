@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 )
 
-func MD5Hash(link string) string {
-	hashed := md5.Sum([]byte(link))
+func MD5Hash(datum string) string {
+	hashed := md5.Sum([]byte(datum))
 	return hex.EncodeToString(hashed[:])
 }
