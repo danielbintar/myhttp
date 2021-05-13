@@ -6,7 +6,7 @@ A service dedicated to hash link using md5 hash
 
 ## Development Guide
 ### Pre-requisite
-- [Go 1.16](https://github.com/bukalapak/sweetup/blob/master/golang/README.md)
+- [Go 1.16](https://golang.org/doc/install)
 
 ### Installation
 ```
