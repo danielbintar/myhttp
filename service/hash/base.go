@@ -2,25 +2,6 @@ package hash
 
 type HashFunc func(link string) string
 
-type hashResult struct {
-	link   string
-	result string
-}
-
-func spawnWorker(hashFunc HashFunc, params chan string, resp chan hashResult, quit chan bool) {
-	for {
-		select {
-		case link := <-params:
-			resp <- hashResult{
-				link:   link,
-				result: hashFunc(link),
-			}
-		case <-quit:
-			return
-		}
-	}
-}
-
 func Hash(hashFunc HashFunc, links []string, workerCount int) map[string]string {
 	if hashFunc == nil || workerCount < 1 || workerCount > 1_000_000 {
 		return nil
@@ -44,4 +25,23 @@ func Hash(hashFunc HashFunc, links []string, workerCount int) map[string]string 
 	}
 
 	return result
+}
+
+type hashResult struct {
+	link   string
+	result string
+}
+
+func spawnWorker(hashFunc HashFunc, params chan string, resp chan hashResult, quit chan bool) {
+	for {
+		select {
+		case link := <-params:
+			resp <- hashResult{
+				link:   link,
+				result: hashFunc(link),
+			}
+		case <-quit:
+			return
+		}
+	}
 }
