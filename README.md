@@ -15,11 +15,12 @@ cd myhttp
 ```
 
 ### Usage
+Example:
 ```
-git clone https://github.com/danielbintar/myhttp.git
 cd myhttp
-./myhttp --parallel 3 google.com facebook.com yahoo.com yandex.com twitter.com reddit.com/r/funny reddit.com/r/notfunny
+./myhttp --parallel 3 google.com reddit.com/r/funny
 ```
+--parallel stands for the number of worker, the default is 10
 
 ### Contribute
 - Create New Pull Request
