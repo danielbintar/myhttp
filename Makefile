@@ -1,3 +1,6 @@
+compile:
+	go build -o myhttp cmd/script/main.go
+
 pretty:
 	gofmt -s -w .
 
