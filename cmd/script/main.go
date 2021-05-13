@@ -11,7 +11,7 @@ import (
 
 func main() {
 	var workerCount int
-	flag.IntVar(&workerCount, "parallel", 1, "number of worker")
+	flag.IntVar(&workerCount, "parallel", 10, "number of worker")
 
 	flag.Parse()
 
