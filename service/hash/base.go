@@ -2,15 +2,15 @@ package hash
 
 import "context"
 
-type HashFunc func(link string) string
+type HashFunc func(datum string) string
 
-func Hash(hashFunc HashFunc, links []string, workerCount int) map[string]string {
+func Hash(hashFunc HashFunc, data []string, workerCount int) map[string]string {
 	if hashFunc == nil || workerCount < 1 || workerCount > 1_000_000 {
 		return nil
 	}
 
-	params := make(chan string, len(links))
-	resp := make(chan hashResult, len(links))
+	params := make(chan string, len(data))
+	resp := make(chan hashResult, len(data))
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -18,21 +18,21 @@ func Hash(hashFunc HashFunc, links []string, workerCount int) map[string]string 
 		go spawnWorker(ctx, hashFunc, params, resp)
 	}
 
-	for _, link := range links {
-		params <- link
+	for _, datum := range data {
+		params <- datum
 	}
 
 	result := make(map[string]string)
-	for i := 1; i <= len(links); i++ {
+	for i := 1; i <= len(data); i++ {
 		r := <-resp
-		result[r.link] = r.result
+		result[r.datum] = r.result
 	}
 
 	return result
 }
 
 type hashResult struct {
-	link   string
+	datum  string
 	result string
 }
 
@@ -41,10 +41,10 @@ func spawnWorker(ctx context.Context, hashFunc HashFunc, params chan string, res
 		select {
 		case <-ctx.Done():
 			return
-		case link := <-params:
+		case datum := <-params:
 			resp <- hashResult{
-				link:   link,
-				result: hashFunc(link),
+				datum:  datum,
+				result: hashFunc(datum),
 			}
 		}
 	}
