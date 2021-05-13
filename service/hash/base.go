@@ -9,8 +9,8 @@ func Hash(hashFunc HashFunc, links []string, workerCount int) map[string]string 
 		return nil
 	}
 
-	params := make(chan string, 100)
-	resp := make(chan hashResult, 100)
+	params := make(chan string, len(links))
+	resp := make(chan hashResult, len(links))
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 

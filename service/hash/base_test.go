@@ -41,6 +41,13 @@ func generateHashTestCase() []testCaseHash {
 		},
 		{
 			workerCount: 5,
+			name:        "no link",
+			hashFunc:    hashFunc,
+			links:       []string{},
+			output:      map[string]string{},
+		},
+		{
+			workerCount: 5,
 			name:        "number of worker is higher than link",
 			hashFunc:    hashFunc,
 			links:       []string{"google.com", "facebook.com"},
