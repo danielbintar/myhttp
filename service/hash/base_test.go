@@ -1,7 +1,6 @@
 package hash_test
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/danielbintar/myhttp/service/hash"
@@ -24,8 +23,8 @@ func hashFunc(link string) string {
 	return "default"
 }
 
-func TestHash(t *testing.T) {
-	testCases := []testCaseHash{
+func generateHashTestCase() []testCaseHash {
+	return []testCaseHash{
 		{
 			workerCount: 5,
 			name:        "no hash function",
@@ -51,6 +50,10 @@ func TestHash(t *testing.T) {
 			},
 		},
 	}
+}
+
+func TestHash(t *testing.T) {
+	testCases := generateHashTestCase()
 
 	for _, testCase := range testCases {
 		resp := hash.Hash(testCase.hashFunc, testCase.links, testCase.workerCount)
@@ -76,6 +79,4 @@ func TestHash(t *testing.T) {
 			}
 		}
 	}
-
-	fmt.Println(testCases)
 }
