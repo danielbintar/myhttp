@@ -1,5 +1,7 @@
 package hash
 
+import "context"
+
 type HashFunc func(link string) string
 
 func Hash(hashFunc HashFunc, links []string, workerCount int) map[string]string {
@@ -9,9 +11,11 @@ func Hash(hashFunc HashFunc, links []string, workerCount int) map[string]string 
 
 	params := make(chan string)
 	resp := make(chan hashResult)
-	quit := make(chan bool)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
 	for i := 1; i <= workerCount; i++ {
-		go spawnWorker(hashFunc, params, resp, quit)
+		go spawnWorker(ctx, hashFunc, params, resp)
 	}
 
 	for _, link := range links {
@@ -32,16 +36,16 @@ type hashResult struct {
 	result string
 }
 
-func spawnWorker(hashFunc HashFunc, params chan string, resp chan hashResult, quit chan bool) {
+func spawnWorker(ctx context.Context, hashFunc HashFunc, params chan string, resp chan hashResult) {
 	for {
 		select {
+		case <-ctx.Done():
+			return
 		case link := <-params:
 			resp <- hashResult{
 				link:   link,
 				result: hashFunc(link),
 			}
-		case <-quit:
-			return
 		}
 	}
 }
