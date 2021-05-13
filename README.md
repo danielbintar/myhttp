@@ -18,6 +18,7 @@ cd myhttp
 ```
 git clone https://github.com/danielbintar/myhttp.git
 cd myhttp
+./myhttp --parallel 3 google.com facebook.com yahoo.com yandex.com twitter.com reddit.com/r/funny reddit.com/r/notfunny
 ```
 
 ### Contribute
